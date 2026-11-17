@@ -1,0 +1,47 @@
+# EuniServ Invoice MVP — pinned, mutually compatible (Python 3.11+/3.12)
+# Install: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+# System deps (NOT pip): Tesseract OCR + Poppler (see README.md)
+
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+python-dotenv==1.0.1
+pydantic==2.10.4
+pydantic-settings==2.7.0
+SQLAlchemy==2.0.36
+alembic==1.14.1
+
+# LangChain RAG stack
+langchain==0.3.20
+langchain-core==0.3.43
+langchain-community==0.3.19
+langchain-chroma==0.2.2
+langchain-google-genai==2.0.9
+google-generativeai==0.8.4
+chromadb==0.5.23
+
+# OCR / PDF — camera-scanned PDFs are the primary input
+# RapidOCR = PP-OCR (PaddleOCR) detection + recognition models exported to
+# ONNX. Same model family as PaddleOCR, but no paddlepaddle runtime (~1 GB)
+# and no system binaries. It is the default engine; Tesseract stays as the
+# fallback. Measured on a 200 DPI phone photo of small print: RapidOCR read
+# every money field correctly while Tesseract lost the totals block entirely.
+rapidocr-onnxruntime==1.4.4
+pytesseract==0.3.13
+pdf2image==1.17.0
+# opencv-python (not -headless) because rapidocr-onnxruntime declares it.
+opencv-python==4.10.0.84
+Pillow==11.0.0
+pdfplumber==0.11.4
+PyMuPDF==1.25.1
+numpy==1.26.4
+
+# Sample invoice generation + tests
+reportlab==4.2.5
+pytest==8.3.4
+httpx==0.28.1
+
+# Local embedding fallback (heavy: pulls torch). Optional — only needed if
+# GEMINI_API_KEY is unset and you still want vector search. If you skip it,
+# RAG falls back to an extractive (keyword) answer, clearly labelled.
+sentence-transformers==3.3.1

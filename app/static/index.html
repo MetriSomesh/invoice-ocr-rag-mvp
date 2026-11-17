@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EuniServ — Invoice Intelligence MVP</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header>
+  <h1>EuniServ — Invoice Intelligence</h1>
+  <p>Upload a scanned invoice. OCR reads it, the pipeline extracts fields, checks compliance, and answers questions from the document itself.</p>
+</header>
+<main>
+  <div class="card">
+    <h2>1 — Upload an invoice</h2>
+    <div class="drop" id="drop">Drop a PDF, JPG or PNG here — or <button class="secondary" type="button" id="browseBtn">Browse file</button>
+      <br><span class="muted">Camera-scanned PDFs are OCR'd with Tesseract after OpenCV cleanup. Digital PDFs use their text layer. Nothing leaves this computer.</span></div>
+    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" hidden>
+    <label for="poTotal">Expected PO total (optional, in the invoice's currency) — enables the PO variance check</label>
+    <input type="number" id="poTotal" placeholder="e.g. 1343750" step="0.01">
+    <p><button id="uploadBtn" type="button">Process invoice</button></p>
+    <div id="status" class="muted"></div>
+  </div>
+
+  <div class="card" id="resultCard" hidden>
+    <h2>2 — Result</h2>
+    <div class="row">
+      <div><div class="kpi-label">Vendor</div><div id="rVendor">—</div></div>
+      <div><div class="kpi-label">Invoice</div><div id="rInv">—</div></div>
+      <div><div class="kpi-label">Total</div><div class="kpi" id="rTotal">—</div></div>
+      <div><div class="kpi-label">Verdict</div><div id="rVerdict">—</div></div>
+      <div><div class="kpi-label">Risk score</div><div class="kpi" id="rRisk">—</div></div>
+      <div><div class="kpi-label">OCR</div><div id="rOcr">—</div></div>
+    </div>
+    <h3>Compliance checks</h3>
+    <table><thead><tr><th>Check</th><th>Status</th><th>Detail</th></tr></thead><tbody id="checksBody"></tbody></table>
+    <p><button class="secondary" id="rawBtn" type="button">Show raw OCR text</button>
+    <button class="secondary" id="auditBtn" type="button">Download audit trail (JSON)</button></p>
+    <pre id="rawPre" hidden></pre>
+  </div>
+
+  <div class="card" id="askCard" hidden>
+    <h2>3 — Ask the invoice (RAG)</h2>
+    <label for="q">Question — answered only from this invoice, with citations</label>
+    <input type="text" id="q" placeholder="e.g. What is the VAT amount and is the PO total matched?">
+    <p><button id="askBtn" type="button">Ask</button> <span id="askModel" class="muted"></span></p>
+    <div id="answer"></div>
+  </div>
+
+  <div class="card">
+    <h2>Processed invoices</h2>
+    <div id="list" class="muted">No invoices yet — upload one above.</div>
+  </div>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

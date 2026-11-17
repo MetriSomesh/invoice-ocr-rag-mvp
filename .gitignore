@@ -1,0 +1,15 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+chroma_db/
+uploads/*
+!uploads/.gitkeep
+.pytest_cache/
+.DS_Store
+Thumbs.db
+*.log
